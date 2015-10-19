@@ -58,6 +58,7 @@ public class RandomBattle
    
    //Declare Mob Variables
    String mNames[] = {"Hipster", "Emo", "Nerd", "Jock", "Teacher"};
+   int mHealth[] = {40,30,40,45,50};
                                              
    /*Attack Values
    Hipster:   Make meme face (3-4)       Blast dubstep (3-5)          Whack with keyboard (5-7)
@@ -111,6 +112,18 @@ public class RandomBattle
       }
    }
    
+   //Display Mobs
+   System.out.println("You are fighting:");
+   for (int counter = 0; counter < 5; counter++){
+      if (numOfEachMob[counter] > 0) {
+         System.out.print(numOfEachMob[counter] + " " + mNames[counter]);
+         if (numOfEachMob[counter] > 1)
+            System.out.println("s");
+         else
+            System.out.println("");     
+      }   
+   }
+   
    //Assigns mob names into mNames[]
    for (int counter = 0; counter < totalNumOfMobs+1; counter++)
       mNames[counter] = tempNames[counter]; 
@@ -123,10 +136,55 @@ public class RandomBattle
    for (int counter = 0; counter < totalNumOfMobs+1; counter++)
       System.out.print("\n" + mNames[counter]);*/
    
+   //Scanner
+   Scanner keyboard = new Scanner(System.in);
+   
  //Bulk Display
    //Declare Variables
+   String action;
+   boolean viable = false;
    
    //Attack Display
+   while (pHealth > 0) {
+      if (pHealth > 0){
+         System.out.println("\nYou currently have " + pHealth + " health and " + pStamina + "/30 stamina.");
+         System.out.println("Type what you would like to do:");
+         System.out.println("attack, special attack, rest");
+         while (viable == false) {
+            action = keyboard.nextLine().toLowerCase();
+            //attack
+            if (action.equals("attack")){
+               
+               viable = true;
+            }
+            //special attack
+            if (action.equals("special attack")){
+            
+               viable = true;
+            }
+            //rest
+            if (action.equals("rest")){
+               System.out.println("Resting restores 15 stamina. Type yes to confirm or anything else to go back.");
+               action = keyboard.nextLine().toLowerCase();
+               if (action.equals("yes")){
+                  pStamina = pStamina + 14; //+1 stamina per turn acts as the 15th point of stamina
+                  viable = true;
+               }   
+               else 
+                  System.out.println("Try another action!");   
+            }
+            else if (viable == false)   
+               System.out.println("That's not an viable action! Try a different one!");
+         }
+         viable = false;
+         pStamina++;
+         if (pStamina > 30)
+            pStamina = 30;
+      }
+      else
+      System.out.println("You died!");
+   }
+   
    
    //Declare Variables
    
