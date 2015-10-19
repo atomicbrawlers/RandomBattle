@@ -149,45 +149,45 @@ public class RandomBattle
       if (pHealth > 0){
          System.out.println("\nYou currently have " + pHealth + " health and " + pStamina + "/30 stamina.");
          while (viable == false) {
-				System.out.println("Type what you would like to do:");
-    	      System.out.println("attack, signature, rest");
+	    System.out.println("Type what you would like to do:");
+    	    System.out.println("attack, signature, rest");
             action = keyboard.nextLine().toLowerCase();
             //attack
             if (action.equals("attack")){
-               System.out.println("\nType what you would like to do:");
-					System.out.println("punch, clothesline, suplex");
-					action = keyboard.nextLine().toLowerCase();
-					if (action.equals("punch")){
-					
-					viable = true;
-					} else if (action.equals("clothesline")) {
-					
-					viable = true;
-					} else if (action.equals("suplex")) {
-					
-					viable = true;
-					} else
-						System.out.println("That's not a viable attack!\n");          
+                System.out.println("\nType what you would like to do:");
+		System.out.println("punch, clothesline, suplex");
+		action = keyboard.nextLine().toLowerCase();
+		if (action.equals("punch")){
+		
+		viable = true;
+		} else if (action.equals("clothesline")) {
+		
+		viable = true;
+		} else if (action.equals("suplex")) {
+		
+		viable = true;
+		} else
+			System.out.println("That's not a viable attack!\n");          
             } else {
             //special attack
-            if (action.equals("special attack")){
+            if (action.equals("signature")){
            	   System.out.println("\nType what you would like to do:");
-					System.out.println("leg drop, STFU, attitude adjustment");
-					action = keyboard.nextLine().toLowerCase();
-					if (action.equals("leg drop") || action.equals("legdrop")){
-					
-					pStamina = pStamina - signatureValues[0][2] -1; //-1 because each turn adds 1
-					viable = true;
-					} else if (action.equals("stfu")) {
-					
-					pStamina = pStamina - signatureValues[1][2] -1; //-1 because each turn adds 1
-					viable = true;
-					} else if (action.equals("attitude adjustment") || action.equals("aa")) {
-					
-					pStamina = pStamina - signatureValues[2][2] -1; //-1 because each turn adds 1
-					viable = true;
-					} else
-						System.out.println("That's not a viable attack!");  
+		System.out.println("leg drop, STFU, attitude adjustment");
+		action = keyboard.nextLine().toLowerCase();
+		if (action.equals("leg drop") || action.equals("legdrop")){
+		
+		pStamina = pStamina - signatureValues[0][2] -1; //-1 because each turn adds 1
+		viable = true;
+		} else if (action.equals("stfu")) {
+		
+		pStamina = pStamina - signatureValues[1][2] -1; //-1 because each turn adds 1
+		viable = true;
+		} else if (action.equals("attitude adjustment") || action.equals("aa")) {
+		
+		pStamina = pStamina - signatureValues[2][2] -1; //-1 because each turn adds 1
+		viable = true;
+		} else
+			System.out.println("That's not a viable attack!");  
                viable = true;
             } else {
             //rest
