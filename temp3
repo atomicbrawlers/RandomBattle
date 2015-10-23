@@ -1,0 +1,228 @@
+/*Example Battle prompts
+
+The 1st zombie bit you for 8 damage!                 (92 health left)
+The spider missed!                                   (92 health left)
+The 2nd zombie scratched you for 4 damage!           (88 health left)
+The skeleton shot you for 14 damage! *Critical hit!* (74 health left)
+
+You did 9 damage to the 1st Zombie!                  (11 health left)
+You did 5 damage to all enemies!                     (6,15,15,15 health left) //don't do AOE attacks in this program b/c no clean way to denote them
+
+*1st Zombie has been defeated!*
+
+The spider spit acid at your for 7 damage!           (3 health left)
+The 2nd zombie bit you for 6 damage!                 (0 health left)
+*You died!*
+
+*/
+
+/*Notes
+
+have 3+ different attacks; attacks vary in damage depending on monster
+have 3+ special attacks that consume stamina (stamina restores by fixed amount each turn)
+have a way to restore stamina
+
+make 5+ kinds of monsters
+can fight up to 5 monsters
+add rare chance for a horde of 10 hispters
+
+check for more than 1 of same monster
+   //make string to store {1st,2nd,3rd,...} up to max # of monsters
+   //add string value in front of monster's name
+
+check for how far health update should go
+   //find length of output string to determine how many '/t' to use 
+   
+use arrays to store different kinds of attacks
+
+*/
+
+//add classes after program is finished
+
+import java.util.*;
+import java.util.Scanner;
+import java.util.Random;
+
+public class RandomBattle
+{
+   public static void main(String[] args)
+   {
+                                              
+   //Declare Player Variables JOHN CENA
+   int pHealth = 200;
+   int pStamina = 30;
+   String pAttackNames[] = {"punched", "clotheslined", "suplexed"};
+   int pAttackValues[][] = {{3,5},{4,8},{4,7}};
+   String signatureNames[] = {"did a leg drop on", "did the STFU on", "AA'd"};
+   int signatureValues[][] = {{8,9,10},{10,15,16},{12,18,23}}; //Damage: 1st & 2nd #; Stamina Consumption: 3rd #
+   
+   //Declare Mob Variables
+   String mNames[] = {"Hipster", "Emo", "Nerd", "Jock", "Teacher"};
+   int mHealth[] = {40,30,40,45,50};
+                                             
+   /*Attack Values
+   Hipster:   Make meme face (3-4)       Blast dubstep (3-5)          Whack with keyboard (5-7)
+   Emo:       Cut himself (2-3)          Express his feelings (3-5)   Attempted suicide (4-5)  
+   Nerd:      Make math joke (2-4)       Prove a theorem (3-5)        Throw protractor (4-6)
+   Jock:      Show school spirit (3-4)   Steal lunch money (4-5)      Kick in the balls (5-7)  
+   Teacher:   Lock the computer (2-3)    Be hyocritical (4-6)         Take the shot (6-7)
+   */  
+  
+   int mAttacks[][][] = {{{3,4},{3,5},{5,7}},    //Hipster  //[which mob][which attack][damage dealt can be between # and #]
+                         {{2,3},{3,5},{4,5}},    //Goth
+                         {{2,4},{3,5},{4,6}},    //Nerd
+                         {{3,4},{4,5},{5,7}},    //Jock
+                         {{2,3},{4,6},{6,7}}};   //Teacher
+                                              
+   String mAttackNames[][] = {{"made a meme face","blasted dubstep","whacked you with a keyboard"},         //Hipster  //[which mob][name of attack]
+                              {"cut himself","expressed his feelings","attempted suicide"},                 //Goth
+                              {"made a math joke","proved a theorem","threw a protractor at you"},          //Nerd
+                              {"showed school spirit","stole your lunch money","kicked you in the balls"},  //Jock
+                              {"locked your computer","was hypocritical","took the shot"}};                 //Teacher
+   
+   //Random Number Generator
+   Random randomGenerator = new Random();
+   
+   int totalNumOfMobs = randomGenerator.nextInt(4);   //System.out.println("Total number of mobs: " + (totalNumOfMobs+1));
+   int numOfEachMob[] = {0,0,0,0,0};
+   int whichMob;
+   String tempNames[] = new String[4];
+   String prefixes[] = {"1st ","2nd ","3rd ","4th "};
+   int timesSwitched[] = {0,0,0,0,0};
+   int tempNumOfEachMob[] = numOfEachMob;
+   int same = 0;
+   //Random Mob Generation
+   for (int counter = 0; counter < totalNumOfMobs+1; counter++){ 
+      tempNumOfEachMob = numOfEachMob;
+      whichMob = randomGenerator.nextInt(4);
+      numOfEachMob[whichMob]++;
+      tempNames[counter] = mNames[whichMob];    //System.out.println("-" + mNames[whichMob]);
+      //Recursive Numbering
+      if (numOfEachMob[whichMob] > 1){
+         timesSwitched[whichMob]++;
+         tempNames[counter] = prefixes[timesSwitched[whichMob]] + mNames[whichMob]; //System.out.println(tempNames[counter]); //2nd
+         //Checks for, then replaces where same name was used previously
+         for (int insideCounter = 0; insideCounter < 3 && same == 0; insideCounter++){
+            if (tempNames[insideCounter].equals(mNames[whichMob])){
+               tempNames[insideCounter] = prefixes[timesSwitched[whichMob]-1] + mNames[whichMob]; //System.out.println(tempNames[whichMob]); //1st
+               same = 1;
+            }
+         }
+         same = 0;
+      }
+   }
+   
+   //Display Mobs
+   System.out.println("You are fighting:");
+   for (int counter = 0; counter < 5; counter++){
+      if (numOfEachMob[counter] > 0) {
+         System.out.print(numOfEachMob[counter] + " " + mNames[counter]);
+         if (numOfEachMob[counter] > 1)
+            System.out.println("s");
+         else
+            System.out.println("");     
+      }   
+   }
+   
+   //Assigns mob names into mNames[]
+   for (int counter = 0; counter < totalNumOfMobs+1; counter++)
+      mNames[counter] = tempNames[counter]; 
+  
+   /*Test # of each mob and mNames[]
+   System.out.println("How many of each mob:");
+   for (int counter = 0; counter < 5; counter++)
+      System.out.print(numOfEachMob[counter] + " ");
+   
+   for (int counter = 0; counter < totalNumOfMobs+1; counter++)
+      System.out.print("\n" + mNames[counter]);*/
+   
+   //Scanner
+   Scanner keyboard = new Scanner(System.in);
+   
+ //Bulk Display
+   //Declare Variables for Attack Display
+   String action;
+   boolean viable = false;
+	int attackValue;
+	
+	//Declare Variables for Health Calculations
+	
+	//Declare Variables for Process Display
+   
+   //Attack Display
+   while (pHealth > 0) {
+      if (pHealth > 0){
+         System.out.println("\nYou currently have " + pHealth + " health and " + pStamina + "/30 stamina.");
+         while (viable == false) {
+				System.out.println("Type what you would like to do:");
+    	      System.out.println("attack, signature, rest");
+            action = keyboard.nextLine().toLowerCase();
+            //attack
+            if (action.equals("attack")){
+               System.out.println("\nType what you would like to do:");
+					System.out.println("punch, clothesline, suplex");
+					action = keyboard.nextLine().toLowerCase();
+					if (action.equals("punch")){
+						attackValue = randomGenerator.nextInt(pAttackValues[0][1]-pAttackValues[0][0] + 1) + pAttackValues[0][0]; //generate random number between 2 values
+						viable = true;
+					} else if (action.equals("clothesline")) {
+						attackValue = randomGenerator.nextInt(pAttackValues[1][1]-pAttackValues[1][0] + 1) + pAttackValues[1][0]; //generate random number between 2 values
+						viable = true;
+					} else if (action.equals("suplex")) {
+						attackValue = randomGenerator.nextInt(pAttackValues[2][1]-pAttackValues[2][0] + 1) + pAttackValues[2][0]; //generate random number between 2 values
+						viable = true;
+					} else
+						System.out.println("That's not a viable attack!\n");          
+            } else {
+            //special attack
+            if (action.equals("signature")){
+           		System.out.println("\nType what you would like to do:");
+					System.out.println("leg drop, STFU, attitude adjustment");
+					action = keyboard.nextLine().toLowerCase();
+					if (action.equals("leg drop") || action.equals("legdrop")){
+						attackValue = randomGenerator.nextInt(signatureValues[0][1]-signatureValues[0][0] + 1) + signatureValues[0][0]; //generate random number between 2 values
+						pStamina = pStamina - signatureValues[0][2] -1; //-1 because each turn adds 1
+						viable = true;
+					} else if (action.equals("stfu")) {
+						attackValue = randomGenerator.nextInt(signatureValues[1][1]-signatureValues[1][0] + 1) + signatureValues[1][0]; //generate random number between 2 values
+						pStamina = pStamina - signatureValues[1][2] -1; //-1 because each turn adds 1
+						viable = true;
+					} else if (action.equals("attitude adjustment") || action.equals("aa")) {
+						attackValue = randomGenerator.nextInt(signatureValues[2][1]-signatureValues[2][0] + 1) + signatureValues[2][0]; //generate random number between 2 values
+						pStamina = pStamina - signatureValues[2][2] -1; //-1 because each turn adds 1
+						viable = true;
+					} else
+						System.out.println("That's not a viable attack!\n");  
+            } else {
+            //rest
+            if (action.equals("rest")){
+               System.out.println("Resting restores 15 stamina. Type yes to confirm or anything else to go back.");
+               action = keyboard.nextLine().toLowerCase();
+               if (action.equals("yes")){
+                  pStamina = pStamina + 14; //+1 stamina per turn acts as the 15th point of stamina
+                  viable = true;
+               }   
+               else 
+                  System.out.println("Try another action!\n");   
+            	}
+            	else if (viable == false)   
+               	System.out.println("That's not an viable action! Try a different one!\n");
+				}}
+         }
+         viable = false;
+         pStamina++;
+         if (pStamina > 30)
+            pStamina = 30;
+				
+			//Health Calculations
+			
+  	
+   		//Process Display	
+			
+      }
+      else
+      System.out.println("You died!");
+   }     
+		
+   }
+} 
